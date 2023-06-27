@@ -1,0 +1,57 @@
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo:6
+    ports:
+      - '27317:27017'
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - dev-network
+
+  scheduler:
+    build:
+      context: ./scheduler
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+      - APP_MONGODB_URI=${APP_MONGODB_URI}
+      - OVERDUE_PROCESSING_MS=${OVERDUE_PROCESSING_MS}
+
+    image: futask/scheduler
+    mem_limit: 512mb
+    volumes:
+      - ./scheduler:/app
+      - /app/node_modules
+    ports:
+      - '8000:3000'
+    command: yarn dev
+    depends_on:
+      - mongodb
+    networks:
+      - dev-network
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+      - JOB_FINISHED=0
+      - APP_SCHEDULER_ENDPOINT=${APP_SCHEDULER_ENDPOINT}
+
+    image: futask/worker
+    mem_limit: 512mb
+    volumes:
+      - ./worker:/app
+      - /app/node_modules
+    ports:
+      - '8100:3000'
+    command: yarn dev
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge

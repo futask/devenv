@@ -1,0 +1,16 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "futask-dev",
+    "dateExported": "2023-06-27T00:35:46.345Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "scheduler-endpoint",
+            "value": "http://localhost:8000"
+        },
+        {
+            "name": "worker-endpoint",
+            "value": "http://localhost:8100"
+        }
+    ]
+}

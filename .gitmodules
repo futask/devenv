@@ -1,0 +1,6 @@
+[submodule "worker"]
+	path = worker
+	url = git@github.com:futask/futask-worker.git
+[submodule "scheduler"]
+	path = scheduler
+	url = git@github.com:futask/futask-scheduler.git

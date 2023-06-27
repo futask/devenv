@@ -40,6 +40,7 @@ services:
       - PORT=3000
       - JOB_FINISHED=0
       - APP_SCHEDULER_ENDPOINT=${APP_SCHEDULER_ENDPOINT}
+      - DEFAULT_CALLBACK_URL=${WORKER_DEFAULT_CALLBACK_URL}
 
     image: futask/worker
     mem_limit: 512mb

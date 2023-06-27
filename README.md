@@ -2,6 +2,10 @@
 
 This repository is used to set up the entire application for this app.
 
+## Solution Design Diagram
+
+![Solution Design Diagram](assets/flow-and-db-diagram.png)
+
 ## Installation Instructions
 
 ### 1️⃣ Clone devenv repository

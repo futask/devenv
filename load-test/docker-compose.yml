@@ -1,0 +1,72 @@
+version: '3.1'
+
+services:
+  artillery:
+    image: artilleryio/artillery
+    volumes:
+      - ./:/scripts
+    command: run /scripts/test-script.yml
+    networks:
+      - dev-network
+
+  mongodb:
+    image: mongo:6
+    ports:
+      - '27017'
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - dev-network
+
+  scheduler:
+    build:
+      context: ../scheduler
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+      - APP_MONGODB_URI=${APP_MONGODB_URI}
+      - OVERDUE_PROCESSING_MS=${OVERDUE_PROCESSING_MS}
+    image: futask/scheduler
+    deploy:
+      mode: replicated
+      replicas: 2
+    volumes:
+      - ../scheduler:/app
+      - /app/node_modules
+    ports:
+      - '3000'
+    command: yarn dev
+    depends_on:
+      - mongodb
+    networks:
+      - dev-network
+
+  worker:
+    build:
+      context: ../worker
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+      - JOB_FINISHED=0
+      - APP_SCHEDULER_ENDPOINT=${APP_SCHEDULER_ENDPOINT}
+      - DEFAULT_CALLBACK_URL=${WORKER_DEFAULT_CALLBACK_URL}
+      - APP_MONGODB_URI=${APP_MONGODB_URI}
+
+    image: futask/worker
+    deploy:
+      mode: replicated
+      replicas: 2
+    volumes:
+      - ../worker:/app
+      - /app/node_modules
+    ports:
+      - '3000'
+    command: yarn dev
+    depends_on:
+      - mongodb
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge

@@ -41,7 +41,7 @@ services:
       - JOB_FINISHED=0
       - APP_SCHEDULER_ENDPOINT=${APP_SCHEDULER_ENDPOINT}
       - DEFAULT_CALLBACK_URL=${WORKER_DEFAULT_CALLBACK_URL}
-
+      - APP_MONGODB_URI=${APP_MONGODB_URI}
     image: futask/worker
     mem_limit: 512mb
     volumes:
@@ -50,6 +50,8 @@ services:
     ports:
       - '8100:3000'
     command: yarn dev
+    depends_on:
+      - mongodb
     networks:
       - dev-network
 

@@ -1,0 +1,43 @@
+name: Build and Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  load-test:
+    name: Run LOAD TEST
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      
+      - name: Move to load-test directory
+        run: |
+          cd ./load-test
+          
+      - name: List files
+        run: |
+          ls ./
+
+      - name: Setup test-script.yml
+        run: |
+          rm -f test-script.yml
+          mv test-script.github-action.yml test-script
+
+      - name: Build and Up Worker and Scheduler Services
+        uses: isbang/compose-action@v1.5.0
+        with:
+          up-flags: "-d"
+          services: |
+            scheduler
+            worker
+      
+      - name: Run test
+        uses: isbang/compose-action@v1.5.0
+        with:
+          services: |
+            artillery

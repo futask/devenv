@@ -29,7 +29,7 @@ services:
     image: futask/scheduler
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 10
     volumes:
       - ../scheduler:/app
       - /app/node_modules
@@ -55,7 +55,7 @@ services:
     image: futask/worker
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 3
     volumes:
       - ../worker:/app
       - /app/node_modules

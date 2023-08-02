@@ -15,29 +15,29 @@ jobs:
         with:
           submodules: recursive
       
-      - name: Move to load-test directory
-        run: |
-          cd ./load-test
-          
-      - name: List files
-        run: |
-          ls ./
-
       - name: Setup test-script.yml
+        working-directory: ./load-test
         run: |
           rm -f test-script.yml
-          mv test-script.github-action.yml test-script
+          mv test-script.github-action.yml test-script.yml
 
       - name: Build and Up Worker and Scheduler Services
-        uses: isbang/compose-action@v1.5.0
-        with:
-          up-flags: "-d"
-          services: |
-            scheduler
-            worker
+        working-directory: ./load-test
+        run: |
+          docker compose up -d scheduler worker
+
+      - name: Execute Load-test
+        working-directory: ./load-test
+        run: |
+          docker compose up artillery
       
-      - name: Run test
-        uses: isbang/compose-action@v1.5.0
-        with:
-          services: |
-            artillery
+      - name: 🎬 📈 Track Load-test Result ✅
+        working-directory: ./load-test
+        run: |
+          docker compose logs --tail=150 artillery
+
+      - name: Shutdown all services
+        working-directory: ./load-test
+        run: |
+          docker compose down
+      

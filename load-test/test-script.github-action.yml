@@ -5,16 +5,19 @@ config:
   phases:
     - name: Warm up phase
       duration: 30
-      arrivalRate: 1
-      rampTo: 5
-    - name: Ramp up load
-      duration: 60
-      arrivalRate: 5
-      rampTo: 10
-    - name: Spike phase
-      duration: 60
       arrivalRate: 10
-      rampTo: 30
+      rampTo: 10
+    - name: Ramp up load
+      duration: 30
+      arrivalRate: 10
+      rampTo: 50
+    - name: Spike phase
+      duration: 30
+      arrivalRate: 50
+      rampTo: 300
+    - name: Sustain load
+      duration: 180
+      arrivalRate: 300
 scenarios:
   - name: Create a new task
     flow:

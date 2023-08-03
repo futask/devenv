@@ -1,9 +1,11 @@
-name: Build and Deployment
+name: Execute load test from a file name
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      script-file:
+        required: true
+        type: string
 
 jobs:
   load-test:
@@ -19,7 +21,7 @@ jobs:
         working-directory: ./load-test
         run: |
           rm -f test-script.yml
-          mv test-script.github-action.yml test-script.yml
+          mv ${{ inputs.script-file }} test-script.yml
 
       - name: Build and Up Worker and Scheduler Services
         working-directory: ./load-test

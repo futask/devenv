@@ -1,0 +1,38 @@
+name: Load Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  level-1:
+    name: Load test level 1
+    uses: ./.github/workflows/load-test-workflow.yml
+    with:
+      script-file: ./test-script.level-1.yml
+    
+  level-2:
+    name: Load test level 2
+    uses: ./.github/workflows/load-test-workflow.yml
+    with:
+      script-file: ./test-script.level-2.yml
+    
+  level-3:
+    name: Load test level 3
+    uses: ./.github/workflows/load-test-workflow.yml
+    with:
+      script-file: ./test-script.level-3.yml
+    
+  level-4:
+    name: Load test level 4
+    uses: ./.github/workflows/load-test-workflow.yml
+    with:
+      script-file: ./test-script.level-4.yml
+    
+  level-5:
+    name: Load test level 5
+    uses: ./.github/workflows/load-test-workflow.yml
+    with:
+      script-file: ./test-script.level-5.yml
+    

@@ -1,0 +1,29 @@
+config:
+  # This is a test server run by team Artillery
+  # It's designed to be highly scalable
+  target: http://scheduler:3000
+  phases:
+    - name: Warm up phase
+      duration: 30
+      arrivalRate: 10
+      rampTo: 10
+    - name: Ramp up load
+      duration: 60
+      arrivalRate: 10
+      rampTo: 200
+    - name: Spike phase
+      duration: 240
+      arrivalRate: 200
+      rampTo: 750
+    - name: Sustain load
+      duration: 300
+      arrivalRate: 750
+scenarios:
+  - name: Create a new task
+    flow:
+      - post:
+          url: "/v1.0/managements/tasks"
+          json:
+            tasks:
+              - payload:
+                  stepId: 11
